@@ -1,0 +1,8 @@
+{
+  "app_store": {
+    "issuer_id": "MY_ISSUER_ID",
+    "key_id": "MY_KEY_ID",
+    "auth_key_file_path": "MY_AUTH_KEY_FILE_PATH",
+    "vendor_number": "MY_VENDOR_NUMBER"
+  }
+}

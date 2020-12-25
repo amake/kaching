@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler/setup'
+require 'kaching'
+
+CONFIG_PATH = 'config.json'
+
+raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
+
+Kaching::Configure.from_json_file(CONFIG_PATH)
+
+puts('App Store', Kaching::AppStore.latest_sales_count)
