@@ -4,6 +4,7 @@ PATH
     kaching (0.1.0)
       app_store_connect
       google-cloud-storage
+      rubyzip
 
 GEM
   remote: https://rubygems.org/
@@ -112,6 +113,7 @@ GEM
       rubocop
     ruby-progressbar (1.10.1)
     ruby2_keywords (0.0.2)
+    rubyzip (2.3.0)
     signet (0.14.0)
       addressable (~> 2.3)
       faraday (>= 0.17.3, < 2.0)
