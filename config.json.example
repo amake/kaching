@@ -4,5 +4,9 @@
     "key_id": "MY_KEY_ID",
     "auth_key_file_path": "MY_AUTH_KEY_FILE_PATH",
     "vendor_number": "MY_VENDOR_NUMBER"
+  },
+  "google_play": {
+    "credentials_file_path": "MY_CREDENTIALS_FILE_PATH",
+    "bucket_id": "MY_BUCKET_ID"
   }
 }

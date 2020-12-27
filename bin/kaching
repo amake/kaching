@@ -11,3 +11,4 @@ raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
 Kaching::Configure.from_json_file(CONFIG_PATH)
 
 puts('App Store', Kaching::AppStore.latest_sales_count)
+puts('Google Play', Kaching::GooglePlay.latest_sales_count)

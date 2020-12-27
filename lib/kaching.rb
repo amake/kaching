@@ -3,6 +3,7 @@
 require_relative 'kaching/version'
 require_relative 'kaching/configure'
 require_relative 'kaching/app_store'
+require_relative 'kaching/google_play'
 
 module Kaching
   class Error < StandardError; end

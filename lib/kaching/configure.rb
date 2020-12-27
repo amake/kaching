@@ -12,6 +12,7 @@ module Kaching
         end
 
         AppStore.configure(**config[:app_store])
+        GooglePlay.configure(**config[:google_play])
       end
     end
   end
