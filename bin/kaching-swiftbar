@@ -18,22 +18,37 @@ Dir.chdir(File.expand_path('..', __dir__))
 
 require 'bundler/setup'
 require 'kaching'
+require 'date'
 
 CONFIG_PATH = 'config.json'
+
+# @param data [Date]
+# @return [String]
+def relativize(date)
+  if date.today?
+    'Today'
+  elsif date.yesterday?
+    'Yesterday'
+  elsif (Date.today - date) < 7
+    "#{(Date.today - date).to_i} days ago"
+  else
+    date.to_s
+  end
+end
 
 raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
 
 Kaching::Configure.from_json_file(CONFIG_PATH)
 
-apple = Kaching::AppStore.latest_sales_count
-google = Kaching::GooglePlay.latest_sales_count
+apple_date, apple_count = Kaching::AppStore.latest_sales_count
+google_date, google_count = Kaching::GooglePlay.latest_sales_count
 
 app_name = File.basename($PROGRAM_NAME).split('.').first || 'My App'
 
 puts(<<~MSG)
-  :applelogo: #{apple.last} 🤖 #{google.last}
+  :applelogo: #{apple_count} 🤖 #{google_count}
   ---
   #{app_name} sales
-  • App Store: #{apple.last} (#{apple.first})
-  • Google Play: #{google.last} (#{google.first})
+  • App Store: #{apple_count} (#{relativize(apple_date)})
+  • Google Play: #{google_count} (#{relativize(google_date)})
 MSG
