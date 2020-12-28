@@ -3,6 +3,7 @@
 require 'google/cloud/storage'
 require 'csv'
 require 'zip'
+require 'date'
 
 module Kaching
   # Fetch sales data from Google Play

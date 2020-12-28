@@ -2,6 +2,7 @@
 
 require 'app_store_connect'
 require 'csv'
+require 'date'
 
 module Kaching
   # Fetch sales data from Apple App Store
