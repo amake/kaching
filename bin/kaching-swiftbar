@@ -14,7 +14,7 @@
 # <bitbar.dependencies>ruby</bitbar.dependencies>
 # <bitbar.abouturl>https://github.com/amake/kaching</bitbar.abouturl>
 
-Dir.chdir(File.expand_path(File.join(__dir__, '..')))
+Dir.chdir(File.expand_path('..', __dir__))
 
 require 'bundler/setup'
 require 'kaching'
