@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# This is a script for use with SwiftBar (https://swiftbar.app/) or BitBar
+# (https://getbitbar.com)
+#
+# Symlink it into your plugins folder as <app_name>.<interval>.rb
+
+# <bitbar.title>Kaching</bitbar.title>
+# <bitbar.version>v1.0</bitbar.version>
+# <bitbar.author>Aaron Madlon-Kay</bitbar.author>
+# <bitbar.author.github>amake</bitbar.author.github>
+# <bitbar.desc>Monitor sales on the App Store and Google Play.</bitbar.desc>
+# <bitbar.dependencies>ruby</bitbar.dependencies>
+# <bitbar.abouturl>https://github.com/amake/kaching</bitbar.abouturl>
+
+Dir.chdir(File.expand_path(File.join(__dir__, '..')))
+
+require 'bundler/setup'
+require 'kaching'
+
+CONFIG_PATH = 'config.json'
+
+raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
+
+Kaching::Configure.from_json_file(CONFIG_PATH)
+
+apple = Kaching::AppStore.latest_sales_count
+google = Kaching::GooglePlay.latest_sales_count
+
+app_name = File.basename($0).split('.').first || 'My App'
+
+puts(<<~MSG)
+  :applelogo: #{apple.last} 🤖 #{google.last}
+  ---
+  #{app_name} sales
+  • App Store: #{apple.last} (#{apple.first})
+  • Google Play: #{google.last} (#{google.first})
+MSG
