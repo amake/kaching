@@ -8,12 +8,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Aaron Madlon-Kay']
   spec.email         = ['aaron@madlon-kay.com']
 
-  spec.summary       = 'Ding when you sell an app'
+  spec.summary       = 'Monitor sales on the App Store and Google Play'
   spec.homepage      = 'https://github.com/amake/kaching'
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.7.0')
-
-  spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/amake/kaching'
