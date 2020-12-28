@@ -28,7 +28,7 @@ Kaching::Configure.from_json_file(CONFIG_PATH)
 apple = Kaching::AppStore.latest_sales_count
 google = Kaching::GooglePlay.latest_sales_count
 
-app_name = File.basename($0).split('.').first || 'My App'
+app_name = File.basename($PROGRAM_NAME).split('.').first || 'My App'
 
 puts(<<~MSG)
   :applelogo: #{apple.last} 🤖 #{google.last}
