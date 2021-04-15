@@ -55,7 +55,7 @@ module Kaching
         date, report = latest_sales_report
         count = 0
         parse_report(report).each do |row|
-          count += 1 if row [:product_type_identifier] == '1F'
+          count += 1 if row[:product_type_identifier] == '1F'
         end
         [date, count]
       end
