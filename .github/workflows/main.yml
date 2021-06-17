@@ -11,8 +11,13 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7.3
-    - name: Run the default task
+    - name: Install dependencies
       run: |
         gem install bundler -v 2.2.20
         bundle install
-        bundle exec rake
+    - name: Test
+      run: bundle exec rake
+    - name: Type check
+      run: |
+        for gem in app_store_connect google-cloud-storage rubyzip; do bundle exec yard gems $gem; done
+        bundle exec solargraph typecheck --level typed
