@@ -14,7 +14,7 @@ module Kaching
         @bucket_id = bucket_id
       end
 
-      # @return [Google::Cloud::Storage]
+      # @return [Google::Cloud::Storage::Project]
       def client
         Google::Cloud::Storage.new(
           credentials: @credentials_file_path,
@@ -35,7 +35,7 @@ module Kaching
           .max_by(&:created_at)
       end
 
-      # @return [CSV]
+      # @return [String]
       def latest_sales_report
         file = latest_sales_report_file
         raise("Expected a ZIP file; got #{file.name}") unless file.name.end_with?('.zip')
@@ -48,7 +48,7 @@ module Kaching
         end
       end
 
-      # @return [Date,Integer]
+      # @return [Array(Date,Integer)]
       def latest_sales_count
         report = latest_sales_report
         count_by_date = Hash.new(0)

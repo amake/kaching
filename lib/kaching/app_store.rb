@@ -50,7 +50,7 @@ module Kaching
         end
       end
 
-      # @return [Date,Integer]
+      # @return [Array(Date,Integer)]
       def latest_sales_count
         date, report = latest_sales_report
         count = 0
