@@ -11,6 +11,8 @@ or Google Play.
    - [App Store Connect API](https://developer.apple.com/app-store-connect/api/)
    - [Google Developers Console](https://support.google.com/googleplay/android-developer/answer/6135870#export)
      service account
+3. To use currency conversion features, get an [Open Exchange
+   Rates](https://openexchangerates.org/signup) app ID
 
 ## Usage
 

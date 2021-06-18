@@ -8,5 +8,8 @@
   "google_play": {
     "credentials_file_path": "MY_CREDENTIALS_FILE_PATH",
     "bucket_id": "MY_BUCKET_ID"
+  },
+    "open_exchange_rates": {
+    "app_id": "MY_APP_ID"
   }
 }

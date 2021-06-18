@@ -13,6 +13,7 @@ module Kaching
 
         AppStore.configure(**config[:app_store])
         GooglePlay.configure(**config[:google_play])
+        Currency.configure(**config[:open_exchange_rates])
       end
     end
   end

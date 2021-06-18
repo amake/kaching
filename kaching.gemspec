@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'app_store_connect'
   spec.add_dependency 'google-cloud-storage'
+  spec.add_dependency 'open_exchange_rates'
   spec.add_dependency 'rubyzip'
 
   spec.add_development_dependency 'minitest'

@@ -4,6 +4,7 @@ PATH
     kaching (0.1.0)
       app_store_connect
       google-cloud-storage
+      open_exchange_rates
       rubyzip
 
 GEM
@@ -95,6 +96,8 @@ GEM
     multipart-post (2.1.1)
     nokogiri (1.11.7-x86_64-darwin)
       racc (~> 1.4)
+    open_exchange_rates (0.5.1)
+      yajl-ruby
     os (1.1.1)
     parallel (1.20.1)
     parser (3.0.1.1)
@@ -158,6 +161,7 @@ GEM
     uber (0.1.0)
     unicode-display_width (2.0.0)
     webrick (1.7.0)
+    yajl-ruby (1.4.1)
     yard (0.9.26)
     zeitwerk (2.4.2)
 
