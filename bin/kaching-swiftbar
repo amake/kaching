@@ -36,6 +36,15 @@ def relativize(date)
   end
 end
 
+# @param proceeds [Hash<String,Numeric>]
+# @param to_currency [String]
+# @return [Numeric]
+def proceeds_total(proceeds, to_currency: 'USD')
+  proceeds.sum do |currency, amount|
+    Kaching::Currency.convert(amount: amount, from: currency, to: to_currency)
+  end
+end
+
 raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
 
 Kaching::Configure.from_json_file(CONFIG_PATH)
@@ -43,12 +52,15 @@ Kaching::Configure.from_json_file(CONFIG_PATH)
 apple_date, apple_count, apple_proceeds = Kaching::AppStore.latest_sales_count
 google_date, google_count, google_proceeds = Kaching::GooglePlay.latest_sales_count
 
+apple_proceeds_usd = proceeds_total(apple_proceeds)
+google_proceeds_usd = proceeds_total(google_proceeds)
+
 app_name = File.basename($PROGRAM_NAME).split('.').first || 'My App'
 
 puts(<<~MSG)
   :applelogo: #{apple_count} 🤖 #{google_count}
   ---
   #{app_name} sales
-  • App Store: #{apple_count} (#{relativize(apple_date)})
-  • Google Play: #{google_count} (#{relativize(google_date)})
+  • App Store: #{apple_count} units · US$#{apple_proceeds_usd} (#{relativize(apple_date)})
+  • Google Play: #{google_count} units · US$#{google_proceeds_usd} (#{relativize(google_date)})
 MSG
