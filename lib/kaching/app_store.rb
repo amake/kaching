@@ -50,14 +50,18 @@ module Kaching
         end
       end
 
-      # @return [Array(Date,Integer)]
+      # @return [Array(Date,Integer,Hash<String,Numeric>)]
       def latest_sales_count
         date, report = latest_sales_report
         count = 0
+        proceeds = Hash.new(0)
         parse_report(report).each do |row|
-          count += row[:units] if row[:product_type_identifier] == '1F'
+          next unless row[:product_type_identifier] == '1F'
+
+          count += row[:units]
+          proceeds[row[:customer_currency]] += row[:developer_proceeds]
         end
-        [date, count]
+        [date, count, proceeds]
       end
 
       # @param report [String]

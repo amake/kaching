@@ -48,22 +48,26 @@ module Kaching
         end
       end
 
-      # @return [Array(Date,Integer)]
+      # @return [Array(Date,Integer,Hash<String,Numeric>)]
       def latest_sales_count
         report = latest_sales_report
-        count_by_date = Hash.new(0)
+        info_by_date = {}
 
         parse_report(report).each do |row|
           date = row[:order_charged_date]
           case row[:financial_status]
           when 'Charged'
-            count_by_date[date] += 1
+            info = info_by_date[date] ||= [0, Hash.new(0)]
+            info[0] += 1
+            info[1][row[:currency_of_sale]] += row[:charged_amount]
           when 'Refund'
-            count_by_date[date] -= 1
+            info = info_by_date[date] ||= [0, Hash.new(0)]
+            info[0] -= 1
+            info[1][row[:currency_of_sale]] += row[:charged_amount]
           end
         end
 
-        count_by_date.max_by(&:first)
+        info_by_date.max_by(&:first).flatten
       end
 
       # @param report [String]

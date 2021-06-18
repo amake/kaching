@@ -8,10 +8,10 @@ CONFIG_PATH = 'config.json'
 
 raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
 
-# @param results [Array(Array(String,Integer))]
+# @param results [Array<Array(String,Integer,Hash)>]
 # @return [String]
 def build_msg(results)
-  n = results.map(&:last).sum
+  n = results.sum { |_, count, _| count }
   "Sold #{n} #{n == 1 ? 'copy' : 'copies'}"
 end
 

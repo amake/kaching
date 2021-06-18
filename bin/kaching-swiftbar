@@ -40,8 +40,8 @@ raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
 
 Kaching::Configure.from_json_file(CONFIG_PATH)
 
-apple_date, apple_count = Kaching::AppStore.latest_sales_count
-google_date, google_count = Kaching::GooglePlay.latest_sales_count
+apple_date, apple_count, apple_proceeds = Kaching::AppStore.latest_sales_count
+google_date, google_count, google_proceeds = Kaching::GooglePlay.latest_sales_count
 
 app_name = File.basename($PROGRAM_NAME).split('.').first || 'My App'
 
