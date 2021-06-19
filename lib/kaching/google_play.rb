@@ -55,13 +55,12 @@ module Kaching
 
         parse_report(report).each do |row|
           date = row[:order_charged_date]
+          info = info_by_date[date] ||= [0, Hash.new(0)]
           case row[:financial_status]
           when 'Charged'
-            info = info_by_date[date] ||= [0, Hash.new(0)]
             info[0] += 1
             info[1][row[:currency_of_sale]] += row[:charged_amount]
           when 'Refund'
-            info = info_by_date[date] ||= [0, Hash.new(0)]
             info[0] -= 1
             info[1][row[:currency_of_sale]] += row[:charged_amount]
           end
