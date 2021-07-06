@@ -59,7 +59,7 @@ module Kaching
           next unless row[:product_type_identifier] == '1F'
 
           count += row[:units]
-          proceeds[row[:customer_currency]] += row[:developer_proceeds]
+          proceeds[row[:customer_currency]] += row[:developer_proceeds] * row[:units]
         end
         [date, count, proceeds]
       end
