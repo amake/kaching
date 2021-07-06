@@ -45,14 +45,20 @@ def proceeds_total(proceeds, to_currency: 'USD')
   end
 end
 
-def vendor_summary(date, units, proceeds)
-  proceeds_usd = proceeds_total(proceeds)
-  relative_date = relativize(date)
-  case units
+# @param report [Kaching::Model::Report]
+def vendor_summary(report)
+  proceeds_usd = proceeds_total(report.amounts)
+  relative_date = relativize(report.date)
+  case report.units
   when 0 then "- (#{relative_date})"
   when 1 then format('1 unit · US$%<proceeds>.2f (%<date>s)', proceeds: proceeds_usd, date: relative_date)
   else
-    format('%<units>s units · US$%<proceeds>.2f (%<date>s)', units: units, proceeds: proceeds_usd, date: relative_date)
+    format(
+      '%<units>s units · US$%<proceeds>.2f (%<date>s)',
+      units: report.units,
+      proceeds: proceeds_usd,
+      date: relative_date
+    )
   end
 end
 
@@ -60,15 +66,15 @@ raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
 
 Kaching::Configure.from_json_file(CONFIG_PATH)
 
-apple_date, apple_count, apple_proceeds = Kaching::AppStore.latest_sales_count
-google_date, google_count, google_proceeds = Kaching::GooglePlay.latest_sales_count
+apple = Kaching::AppStore.latest_sales_report
+google = Kaching::GooglePlay.latest_sales_report
 
 app_name = File.basename($PROGRAM_NAME).split('.').first || 'My App'
 
 puts(<<~MSG)
-  :applelogo: #{apple_count} 🤖 #{google_count}
+  :applelogo: #{apple.units} 🤖 #{google.units}
   ---
   #{app_name} sales
-  • App Store: #{vendor_summary(apple_date, apple_count, apple_proceeds)}
-  • Google Play: #{vendor_summary(google_date, google_count, google_proceeds)}
+  • App Store: #{vendor_summary(apple)}
+  • Google Play: #{vendor_summary(google)}
 MSG

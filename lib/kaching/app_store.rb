@@ -24,7 +24,7 @@ module Kaching
 
       # @param date [Date]
       # @return [String]
-      def sales_report(date:)
+      def store_data(date:)
         client.sales_reports(
           filter: {
             report_type: 'SALES',
@@ -38,10 +38,10 @@ module Kaching
       end
 
       # @return [Array(Date,String)]
-      def latest_sales_report
+      def latest_store_data
         date = Date.today
         7.times do
-          report = sales_report(date: date)
+          report = store_data(date: date)
           # Result is a String on success, or a Hash on error (no data available
           # for that day)
           return [date, report] if report.is_a?(String)
@@ -50,25 +50,27 @@ module Kaching
         end
       end
 
-      # @return [Array(Date,Integer,Hash<String,Numeric>)]
-      def latest_sales_count
-        date, report = latest_sales_report
-        count = 0
-        proceeds = Hash.new(0)
-        parse_report(report).each do |row|
+      # @return [Model::Report]
+      def latest_sales_report
+        date, data = latest_store_data
+        transactions = parse_data(data).each_with_object([]) do |row, acc|
           next unless row[:product_type_identifier] == '1F'
 
-          count += row[:units]
-          proceeds[row[:customer_currency]] += row[:developer_proceeds] * row[:units]
+          acc << Model::Transaction.new(
+            units: row[:units],
+            currency: row[:customer_currency],
+            value: row[:developer_proceeds].abs
+          )
         end
-        [date, count, proceeds]
+
+        Model::Report.new(date: date, transactions: transactions)
       end
 
       # @param report [String]
       # @return [CSV]
-      def parse_report(str)
+      def parse_data(data)
         CSV.parse(
-          str,
+          data,
           col_sep: "\t",
           headers: true,
           converters: :numeric,

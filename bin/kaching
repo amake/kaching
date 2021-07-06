@@ -8,19 +8,19 @@ CONFIG_PATH = 'config.json'
 
 raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
 
-# @param results [Array<Array(String,Integer,Hash)>]
+# @param results [Array<Kaching::Model::Report>]
 # @return [String]
-def build_msg(results)
-  n = results.sum { |_, count, _| count }
+def build_msg(reports)
+  n = reports.sum(&:units)
   "Sold #{n} #{n == 1 ? 'copy' : 'copies'}"
 end
 
 Kaching::Configure.from_json_file(CONFIG_PATH)
 
-apple = Kaching::AppStore.latest_sales_count
+apple = Kaching::AppStore.latest_sales_report
 puts('App Store', apple)
 
-google = Kaching::GooglePlay.latest_sales_count
+google = Kaching::GooglePlay.latest_sales_report
 puts('Google Play', google)
 
 msg = build_msg([apple, google])

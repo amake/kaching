@@ -28,7 +28,7 @@ module Kaching
       end
 
       # @return [Google::Cloud::Storage::File]
-      def latest_sales_report_file
+      def latest_store_data_file
         bucket
           .files
           .select { |f| f.name.start_with?('sales/') }
@@ -36,8 +36,8 @@ module Kaching
       end
 
       # @return [String]
-      def latest_sales_report
-        file = latest_sales_report_file
+      def latest_store_data
+        file = latest_store_data_file
         raise("Expected a ZIP file; got #{file.name}") unless file.name.end_with?('.zip')
 
         zip_data = file.download
@@ -48,32 +48,39 @@ module Kaching
         end
       end
 
-      # @return [Array(Date,Integer,Hash<String,Numeric>)]
-      def latest_sales_count
-        report = latest_sales_report
-        info_by_date = {}
+      # @return [Model::Report]
+      def latest_sales_report
+        data = latest_store_data
 
-        parse_report(report).each do |row|
-          date = row[:order_charged_date]
-          info = info_by_date[date] ||= [0, Hash.new(0)]
-          case row[:financial_status]
-          when 'Charged'
-            info[0] += 1
-            info[1][row[:currency_of_sale]] += row[:charged_amount]
-          when 'Refund'
-            info[0] -= 1
-            info[1][row[:currency_of_sale]] += row[:charged_amount]
+        transactions_by_date =
+          parse_data(data).each_with_object({}) do |row, acc|
+            date = row[:order_charged_date]
+            transactions = acc[date] ||= []
+            case row[:financial_status]
+            when 'Charged'
+              transactions << Model::Transaction.new(
+                units: 1,
+                currency: row[:currency_of_sale],
+                value: row[:charged_amount].abs
+              )
+            when 'Refund'
+              transactions << Model::Transaction.new(
+                units: -1,
+                currency: row[:currency_of_sale],
+                value: row[:charged_amount].abs
+              )
+            end
           end
-        end
 
-        info_by_date.max_by(&:first).flatten
+        date, transactions = transactions_by_date.max_by(&:first)
+        Model::Report.new(date: date, transactions: transactions)
       end
 
-      # @param report [String]
+      # @param data [String]
       # @return [CSV]
-      def parse_report(str)
+      def parse_data(data)
         CSV.parse(
-          str,
+          data,
           headers: true,
           converters: %i[numeric date],
           header_converters: :symbol
