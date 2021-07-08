@@ -45,21 +45,57 @@ def proceeds_total(proceeds, to_currency: 'USD')
   end
 end
 
+# @param units [Integer]
+# @return [String]
+def simple_unit_string(units)
+  case units
+  when 0 then '-'
+  when 1 then '1 unit'
+  else "#{units} units"
+  end
+end
+
+# @param sales [Integer]
+# @param refunds [Integer]
+# @return [String]
+def complex_unit_string(sales, refunds)
+  simple = simple_unit_string(sales + refunds)
+  "#{simple} (▲#{sales}▼#{refunds})"
+end
+
+# @param report [Kaching::Model::Report]
+# @return [String]
+def units_summary(report)
+  grouped_transactions = report.transactions.group_by { |t| t.units.positive? }
+  sales = grouped_transactions[true]&.sum(&:units) || 0
+  refunds = grouped_transactions[false]&.sum(&:units) || 0
+  if sales.zero? && refunds.zero?
+    '-'
+  elsif sales.zero?
+    simple_unit_string(refunds)
+  elsif refunds.zero?
+    simple_unit_string(sales)
+  else
+    complex_unit_string(sales, refunds)
+  end
+end
+
+# @param report [Kaching::Model::Report]
+# @return [String]
+def proceeds_summary(report)
+  proceeds_usd = proceeds_total(report.amounts)
+  case report.units
+  when 0 then '-'
+  else format('US$%<proceeds>.2f', proceeds: proceeds_usd)
+  end
+end
+
 # @param report [Kaching::Model::Report]
 def vendor_summary(report)
-  proceeds_usd = proceeds_total(report.amounts)
-  relative_date = relativize(report.date)
-  case report.units
-  when 0 then "- (#{relative_date})"
-  when 1 then format('1 unit · US$%<proceeds>.2f (%<date>s)', proceeds: proceeds_usd, date: relative_date)
-  else
-    format(
-      '%<units>s units · US$%<proceeds>.2f (%<date>s)',
-      units: report.units,
-      proceeds: proceeds_usd,
-      date: relative_date
-    )
-  end
+  units = units_summary(report)
+  proceeds = proceeds_summary(report)
+  date = relativize(report.date)
+  "#{units} · #{proceeds} (#{date})"
 end
 
 raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
