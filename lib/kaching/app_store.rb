@@ -46,8 +46,12 @@ module Kaching
           # for that day)
           return [date, report] if report.is_a?(String)
 
+          warn(report.to_s)
+
           date = date.prev_day
         end
+
+        raise(DataUnavailableError)
       end
 
       # @return [Model::Report]

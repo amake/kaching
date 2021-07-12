@@ -8,6 +8,5 @@ require_relative 'kaching/google_play'
 require_relative 'kaching/currency'
 
 module Kaching
-  class Error < StandardError; end
-  # Your code goes here...
+  class DataUnavailableError < StandardError; end
 end
