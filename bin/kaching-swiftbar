@@ -60,7 +60,7 @@ end
 # @return [String]
 def complex_unit_string(sales, refunds)
   simple = simple_unit_string(sales + refunds)
-  "#{simple} (▲#{sales}▼#{refunds})"
+  "#{simple} (▲#{sales} ▼#{refunds.abs})"
 end
 
 # @param report [Kaching::Model::Report]
