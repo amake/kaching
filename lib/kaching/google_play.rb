@@ -82,9 +82,22 @@ module Kaching
         CSV.parse(
           data,
           headers: true,
-          converters: %i[numeric date],
+          converters: [:numeric, :date, ->(v) { convert_thousands_separated_number(v) }],
           header_converters: :symbol
         )
+      end
+
+      # @param value [String]
+      # @return [Numeric]
+      def convert_thousands_separated_number(value)
+        normalized = value.delete(',')
+        Integer(normalized)
+      rescue ArgumentError
+        begin
+          Float(normalized)
+        rescue ArgumentError
+          value
+        end
       end
     end
   end
