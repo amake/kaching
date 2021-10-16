@@ -70,7 +70,7 @@ module Kaching
         Model::Report.new(date: date, transactions: transactions)
       end
 
-      # @param report [String]
+      # @param data [String]
       # @return [CSV]
       def parse_data(data)
         CSV.parse(
