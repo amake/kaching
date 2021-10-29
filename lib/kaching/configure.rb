@@ -6,6 +6,7 @@ module Kaching
   # Configure connection info for stores
   module Configure
     class << self
+      # @param path [String]
       def from_json_file(path)
         config = File.open(path, 'r') do |f|
           JSON.parse(f.read, symbolize_names: true)
