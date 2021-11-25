@@ -13,7 +13,7 @@ jobs:
         ruby-version: 2.7.5
     - name: Install dependencies
       run: |
-        gem install bundler -v 2.2.30
+        gem install bundler -v 2.2.32
         bundle install
     - name: Test
       run: bundle exec rake
