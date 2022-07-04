@@ -12,7 +12,7 @@ module Kaching
         AppStoreConnect.config = {
           issuer_id: issuer_id,
           key_id: key_id,
-          private_key: File.open(auth_key_file_path, 'r', &:read)
+          private_key: File.read(auth_key_file_path)
         }
         @vendor_number = vendor_number
       end
