@@ -21,4 +21,5 @@ jobs:
       run: |
         gems=($(sed -nE "s/.*spec.add_dependency '([^']+)'.*/\1/p" kaching.gemspec))
         for gem in "${gems[@]}"; do bundle exec yard gems "$gem"; done
+        bundle exec solargraph download-core
         bundle exec solargraph typecheck --level typed
