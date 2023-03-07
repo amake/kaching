@@ -107,7 +107,7 @@ Kaching::Configure.from_json_file(CONFIG_PATH)
 apple =
   begin
     Kaching::AppStore.latest_sales_report
-  rescue DataUnavailableError
+  rescue Kaching::DataUnavailableError
     nil
   end
 google = Kaching::GooglePlay.latest_sales_report
