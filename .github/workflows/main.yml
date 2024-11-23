@@ -10,10 +10,10 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7.7
+        ruby-version: 3.3.6
     - name: Install dependencies
       run: |
-        gem install bundler -v 2.4.7
+        gem install bundler -v 2.5.23
         bundle install
     - name: Test
       run: bundle exec rake
