@@ -85,7 +85,7 @@ module Kaching
       end
 
       # @param data [String]
-      # @return [CSV]
+      # @return [Array<Array<String,undefined>>]
       def parse_data(data)
         CSV.parse(
           data,
