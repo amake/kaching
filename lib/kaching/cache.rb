@@ -7,9 +7,8 @@ module Kaching
   class Cache
     # @param name [String]
     def initialize(name:)
-      FileUtils.mkdir_p('cache')
       @file = "cache/#{name}.json"
-      @data = File.exist?(@file) ? JSON.parse(File.read(@file)) : {}
+      @data = load_data
     end
 
     # @param key [String]
@@ -27,6 +26,17 @@ module Kaching
     # @param expires [Integer,nil] timestamp
     def set(key, value, expires: nil)
       @data[key] = { value: value, expires: expires }
+      persist
+    end
+
+    private
+
+    def load_data
+      File.exist?(@file) ? JSON.parse(File.read(@file)) : {}
+    end
+
+    def persist
+      FileUtils.mkdir_p(File.dirname(@file))
       File.write(@file, JSON.pretty_generate(@data))
     end
   end
