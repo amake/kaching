@@ -26,6 +26,9 @@ module Kaching
         @fx.round(amount * exchange_rate(from: from, to: to))
       end
 
+      # @param from [String]
+      # @param to [String]
+      # @return [Numeric]
       def exchange_rate(from:, to:)
         return 1 if from.casecmp(to).zero?
 
