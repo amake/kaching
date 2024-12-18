@@ -11,9 +11,10 @@ module Kaching
       @data = load_data
     end
 
-    # @param key [String]
+    # @param key [String,Symbol]
     # @return [Object,nil]
     def get(key)
+      key = key.to_sym
       # @type [Integer,nil]
       expires = @data[key]&.[](:expires)
       return nil if expires && Time.now.to_i > expires
@@ -32,7 +33,7 @@ module Kaching
     private
 
     def load_data
-      File.exist?(@file) ? JSON.parse(File.read(@file)) : {}
+      File.exist?(@file) ? JSON.parse(File.read(@file), symbolize_names: true) : {}
     end
 
     def persist
