@@ -22,11 +22,11 @@ module Kaching
       @data[key]&.[](:value)
     end
 
-    # @param key [String]
+    # @param key [String,Symbol]
     # @param value [Object]
     # @param expires [Integer,nil] timestamp
     def set(key, value, expires: nil)
-      @data[key] = { value: value, expires: expires }
+      @data[key.to_sym] = { value: value, expires: expires }
       persist
     end
 
