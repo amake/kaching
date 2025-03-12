@@ -7,14 +7,6 @@ require 'date'
 
 module Kaching
   # Fetch sales data from Google Play
-  #
-  # At some point between 0.44.2 and 0.45.0 Solargraph became unable to parse
-  # the google-cloud-storage gem, so this is a workaround:
-  #
-  # @!parse
-  #   class Google::Cloud::Storage::Project; end
-  #   class Google::Cloud::Storage::Bucket; end
-  #   class Google::Cloud::Storage::File; end
   module GooglePlay
     class << self
       def configure(credentials_file_path:, bucket_id:)
@@ -35,7 +27,10 @@ module Kaching
         client.bucket(@bucket_id)
       end
 
-      # @return [Google::Cloud::Storage::File]
+      # TODO(aaron): Restore below annotation pending
+      # https://github.com/castwide/solargraph/issues/777
+      #
+      # #@return [Google::Cloud::Storage::File]
       def latest_store_data_file
         bucket
           .files
