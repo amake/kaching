@@ -12,14 +12,6 @@ jobs:
       with:
         ruby-version: 3.3.7
     - name: Install dependencies
-      run: |
-        gem install bundler -v 2.6.5
-        bundle install
+      run: make deps
     - name: Test
-      run: bundle exec rake
-    - name: Type check
-      run: |
-        gems=($(sed -nE "s/.*spec.add_dependency '([^']+)'.*/\1/p" kaching.gemspec))
-        for gem in "${gems[@]}"; do bundle exec yard gems "$gem"; done
-        bundle exec solargraph download-core
-        bundle exec solargraph typecheck --level typed
+      run: make test
