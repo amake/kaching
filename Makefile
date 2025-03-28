@@ -2,7 +2,7 @@ gems = $(shell sed -nE "s/.*spec.add_dependency '([^']+)'.*/\1/p" kaching.gemspe
 
 .PHONY: deps
 deps: ## Install dependencies
-	gem install bundler -v 2.6.5
+	gem install bundler -v 2.6.6
 	bundle install
 
 .PHONY: test
