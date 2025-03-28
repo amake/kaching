@@ -27,10 +27,7 @@ module Kaching
         client.bucket(@bucket_id)
       end
 
-      # TODO(aaron): Restore below annotation pending
-      # https://github.com/castwide/solargraph/issues/777
-      #
-      # #@return [Google::Cloud::Storage::File]
+      # @return [Google::Cloud::Storage::File]
       def latest_store_data_file
         bucket
           .files
