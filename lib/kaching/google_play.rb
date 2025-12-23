@@ -3,7 +3,6 @@
 require 'google/cloud/storage'
 require 'csv'
 require 'zip'
-require 'date'
 
 module Kaching
   # Fetch sales data from Google Play
@@ -14,7 +13,7 @@ module Kaching
         @bucket_id = bucket_id
       end
 
-      # @return [Google::Cloud::Storage::Project]
+      # @return [Google::Cloud::Storage]
       def client
         Google::Cloud::Storage.new(
           credentials: @credentials_file_path,
