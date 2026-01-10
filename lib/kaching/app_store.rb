@@ -57,9 +57,7 @@ module Kaching
       def latest_sales_report
         date, data = latest_store_data
         transactions = parse_data(data).each_with_object([]) do |row, acc|
-          id = row[:product_type_identifier]
-          # https://developer.apple.com/help/app-store-connect/reference/reporting/product-type-identifiers
-          next unless %w[1F I1A].include?(id)
+          next if row[:developer_proceeds].zero?
 
           acc << Model::Transaction.new(
             units: row[:units],
