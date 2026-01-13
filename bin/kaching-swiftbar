@@ -65,7 +65,7 @@ end
 # @param report [Kaching::Model::Report]
 # @return [String]
 def units_summary(report)
-  grouped_transactions = report.transactions.group_by { |t| t.units.positive? }
+  grouped_transactions = report.transactions.filter { |t| t.type == :purchase }.group_by { |t| t.units.positive? }
   sales = grouped_transactions[true]&.sum(&:units) || 0
   refunds = grouped_transactions[false]&.sum(&:units) || 0
   if sales.zero? && refunds.zero?
@@ -80,10 +80,21 @@ def units_summary(report)
 end
 
 # @param report [Kaching::Model::Report]
+# @return [String,nil]
+def downloads_summary(report)
+  downloads = report.transactions.filter { |t| t.type == :download }.sum(&:units)
+  case downloads
+  when 0 then nil
+  when 1 then '1 DL'
+  else "#{downloads} :square.and.arrow.down:"
+  end
+end
+
+# @param report [Kaching::Model::Report]
 # @return [String]
 def proceeds_summary(report)
   proceeds_usd = proceeds_total(report.amounts)
-  case report.units
+  case report.paid_units
   when 0 then '-'
   else format('US$%<proceeds>.2f', proceeds: proceeds_usd)
   end
@@ -94,9 +105,15 @@ def vendor_summary(report)
   return 'Error' unless report
 
   units = units_summary(report)
+  downloads = downloads_summary(report)
   proceeds = proceeds_summary(report)
   date = relativize(report.date)
-  "#{units} · #{proceeds} (#{date})"
+
+  if downloads
+    "#{units} · #{proceeds} · #{downloads} (#{date})"
+  else
+    "#{units} · #{proceeds} (#{date})"
+  end
 end
 
 raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
@@ -114,7 +131,7 @@ google = Kaching::GooglePlay.latest_sales_report
 app_name = File.basename($PROGRAM_NAME).split('.').first || 'My App'
 
 puts(<<~MSG)
-  :applelogo: #{apple&.units || '-'} 🤖 #{google.units}
+  :applelogo: #{apple&.paid_units || '-'} 🤖 #{google.units}
   ---
   #{app_name} sales
   • App Store: #{vendor_summary(apple)}

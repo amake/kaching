@@ -57,9 +57,17 @@ module Kaching
       def latest_sales_report
         date, data = latest_store_data
         transactions = parse_data(data).each_with_object([]) do |row, acc|
-          next if row[:developer_proceeds].zero?
+          value = row[:developer_proceeds].abs
+          # https://developer.apple.com/help/app-store-connect/reference/reporting/product-type-identifiers
+          id = row[:product_type_identifier]
+          type = if value.positive? then :purchase
+                 elsif id == '1F' then :download
+                 end
+
+          next unless type
 
           acc << Model::Transaction.new(
+            type: type,
             units: row[:units],
             currency: row[:customer_currency],
             value: row[:developer_proceeds].abs

@@ -4,6 +4,8 @@ module Kaching
   module Model
     # A single transaction
     class Transaction
+      # @return [Symbol]
+      attr_reader :type
       # @return [Integer]
       attr_reader :units
       # @return [String]
@@ -14,7 +16,8 @@ module Kaching
       # @param units [Integer]
       # @param currency [String]
       # @param value [Numeric]
-      def initialize(units:, currency:, value:)
+      def initialize(type:, units:, currency:, value:)
+        @type = type.freeze
         @units = units.freeze
         @currency = currency.freeze
         @value = value.freeze

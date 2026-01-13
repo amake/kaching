@@ -11,7 +11,7 @@ raise "Create #{CONFIG_PATH} first" unless File.exist?(CONFIG_PATH)
 # @param results [Array<Kaching::Model::Report>]
 # @return [String]
 def build_msg(reports)
-  n = reports.sum(&:units)
+  n = reports.sum(&:paid_units)
   "Sold #{n} #{n == 1 ? 'copy' : 'copies'}"
 end
 

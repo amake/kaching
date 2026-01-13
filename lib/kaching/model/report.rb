@@ -22,6 +22,11 @@ module Kaching
         @transactions.sum(&:units)
       end
 
+      # @return [Integer]
+      def paid_units
+        @transactions.filter { |t| t.type == :purchase }.sum(&:units)
+      end
+
       # @return [Hash<String,Numeric>]
       def amounts
         @transactions.each_with_object(Hash.new(0)) do |t, acc|

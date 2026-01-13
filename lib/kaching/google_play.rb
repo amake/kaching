@@ -58,12 +58,14 @@ module Kaching
             case row[:financial_status]
             when 'Charged'
               transactions << Model::Transaction.new(
+                type: :purchase,
                 units: 1,
                 currency: row[:currency_of_sale],
                 value: row[:charged_amount].abs
               )
             when 'Refund'
               transactions << Model::Transaction.new(
+                type: :purchase,
                 units: -1,
                 currency: row[:currency_of_sale],
                 value: row[:charged_amount].abs
